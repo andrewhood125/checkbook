@@ -10,14 +10,40 @@
   </thead>
   <tbody>
     <tr ng-repeat="account in cbCtrl.accounts">
-      <td>{{ account.name }}</td>
-      <td>{{ account.balance | currency }}</td>
-      <td></td>
+
+      <td ng-hide="account.editing">{{ account.name }}</td>
+      <td ng-show="account.editing">
+        <input type="text" ng-model="account.name" value="{{ account.name }}">
+      </td>
+
+      <td ng-hide="account.editing">{{ account.balance | currency }}</td>
+      <td ng-show="account.editing">
+        <input type="number" ng-model="account.balance" value="{{ account.balance }}" />
+      </td>
+
+      <td>
+        <button class="btn btn-default btn-sm" ng-hide="account.editing" ng-click="cbCtrl.toggleEdit(account)">
+          <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+        </button>
+        <button class="btn btn-success btn-sm" ng-show="account.editing" ng-click="cbCtrl.toggleEdit(account)">
+          <span class="glyphicon glyphicon-saved" aria-hidden="true"></span>
+        </button>
+        <button class="btn btn-danger btn-sm" ng-click="cbCtrl.removeAccount(account)">
+          <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+        </button>
+      </td>
+
     </tr>
     <tr>
-      <td><input class="form-control" type="text" ng-model="cbCtrl.newAccount.name"></td>
-      <td><input class="form-control" type="number" step="any" ng-model="cbCtrl.newAccount.balance"></td>
-      <td><button class="btn btn-primary" ng-click="cbCtrl.addAccount()">Add Account</button></td>
+      <td>
+        <input class="form-control" type="text" ng-model="cbCtrl.newAccount.name">
+      </td>
+      <td>
+        <input class="form-control" type="number" step="any" ng-model="cbCtrl.newAccount.balance">
+      </td>
+      <td>
+        <button class="btn btn-primary" ng-click="cbCtrl.addAccount()">Add Account</button>
+      </td>
     </tr>
   </tbody>
 </table>

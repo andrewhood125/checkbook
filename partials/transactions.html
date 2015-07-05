@@ -31,10 +31,10 @@
 
       <td>
 
-        <button class="btn btn-default btn-sm" ng-hide="transaction.editing" ng-click="cbCtrl.toggleEditTransaction(transaction)">
+        <button class="btn btn-default btn-sm" ng-hide="transaction.editing" ng-click="cbCtrl.toggleEdit(transaction)">
           <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
         </button>
-        <button class="btn btn-success btn-sm" ng-show="transaction.editing" ng-click="cbCtrl.toggleEditTransaction(transaction)">
+        <button class="btn btn-success btn-sm" ng-show="transaction.editing" ng-click="cbCtrl.toggleEdit(transaction)">
           <span class="glyphicon glyphicon-saved" aria-hidden="true"></span>
         </button>
 
@@ -83,10 +83,3 @@
     </tr>
   </tbody>
 </table>
-
-<div class="form-group">
-</div>
-
-<input type="submit" class="btn btn-primary" value="Add Transaction">
-
-</form>

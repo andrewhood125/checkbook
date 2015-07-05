@@ -21,8 +21,8 @@ angular.module('checkbook', [])
       self.save();
     }
 
-    self.toggleEditTransaction = function(transaction) {
-      transaction.editing = !transaction.editing;
+    self.toggleEdit = function(obj) {
+      obj.editing = !obj.editing;
     };
 
     self.getBalance = function(account, index) {
@@ -40,9 +40,20 @@ angular.module('checkbook', [])
       var unit = days > 0 ? 'days' : 'months';
       var amount = days || 1;
       var date = moment(new Date(transaction.date)).add(amount, unit);
-      self.date = date.format('MM/DD/YYYY');
-      self.amount = transaction.amount;
-      self.description = transaction.description;
+      self.newTransaction = {
+        date: date.format('MM/DD/YYYY'),
+        amount: transaction.amount,
+        description: transaction.description,
+        account: transaction.account
+      };
+    };
+
+    self.removeAccount = function(account) {
+      var index = self.accounts.indexOf(account);
+      if (index > -1) {
+        self.accounts.splice(index, 1);
+      }
+      self.save();
     };
 
     self.removeTransaction = function(transaction) {
@@ -55,7 +66,7 @@ angular.module('checkbook', [])
 
     self.clearTransaction = function(transaction) {
       var account = self.accounts.find(function(element, index, array) {
-        if(element.name == transaction.account.name)
+        if (element.name == transaction.account.name)
           return element;
       });
       account.balance += transaction.amount;

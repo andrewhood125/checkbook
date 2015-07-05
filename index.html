@@ -76,9 +76,15 @@
                   </ul>
                 </div>
 
-                <button class="btn btn-danger btn-sm" ng-click="cbCtrl.removeTransaction(transaction)">
-                  <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-                </button>
+                <div class="btn-group">
+                  <button class="btn btn-danger btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                  </button>
+                  <ul class="dropdown-menu">
+                    <li><a ng-click="cbCtrl.removeTransaction(transaction)">Remove</a></li>
+                    <li><a ng-click="cbCtrl.clearTransaction(transaction)">Clear</a></li>
+                  </ul>
+                </div>
               </td>
             </tr>
           </tbody>
@@ -98,7 +104,7 @@
           <div class="form-group">
             <div class="input-group">
               <div class="input-group-addon">$</div>
-              <input type="number" class="form-control" ng-model="cbCtrl.amount" placeholder="Amount">
+              <input type="number" step="any" class="form-control" ng-model="cbCtrl.amount" placeholder="Amount">
             </div>
           </div>
 
@@ -114,7 +120,8 @@
 
         <h4>TODO</h4>
         <ul>
-          <li>Allow pennies in transactions</li>
+          <li>Animate when save is successful.</li>
+          <li>Show last saved time.</li>
         </ul>
 
       </div>

@@ -22,6 +22,7 @@ angular.module('checkbook', [])
 
       self.description = "";
       self.amount = "";
+      self.save();
     }
 
     self.toggleEditTransaction = function(transaction) {
@@ -51,7 +52,13 @@ angular.module('checkbook', [])
       if (index > -1) {
         self.transactions.splice(index, 1);
       }
+      self.save();
     };
+
+    self.clearTransaction = function(transaction) {
+      self.startingBalance += transaction.amount;
+      self.removeTransaction(transaction);
+    }
 
     self.save = function() {
       localStorage.setItem('startingBalance', JSON.stringify(self.startingBalance));

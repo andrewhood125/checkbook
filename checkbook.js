@@ -1,8 +1,9 @@
-angular.module('checkbook', ['ngCookies'])
-  .controller('CheckbookController', function($filter, $cookies) {
+angular.module('checkbook', [])
+  .controller('CheckbookController', function($filter) {
     var self = this;
 
     self.startingBalance = 0;
+    self.date = moment().format('MM/DD/YYYY');
     self.runningAmount = 0;
     self.transactions = [];
 
@@ -36,16 +37,13 @@ angular.module('checkbook', ['ngCookies'])
       return sum;
     };
 
-    self.repeatTransaction = function(transaction) {
-      var explodedDate = transaction.date.split("/");
-      var month = parseInt(explodedDate[0]);
-      var buffer = "";
-      if(++month < 10) {
-        buffer = "0";
-      }
-      self.date = buffer + month + "/" + explodedDate[1] + "/" + explodedDate[2];
-      self.description = transaction.description;
+    self.repeatTransaction = function(transaction, days) {
+      var unit = days > 0 ? 'days' : 'months';
+      var amount = days || 1;
+      var date = moment(new Date(transaction.date)).add(amount, unit);
+      self.date = date.format('MM/DD/YYYY');
       self.amount = transaction.amount;
+      self.description = transaction.description;
     };
 
     self.removeTransaction = function(transaction) {
@@ -56,19 +54,15 @@ angular.module('checkbook', ['ngCookies'])
     };
 
     self.save = function() {
-      var expireDate = new Date();
-      expireDate.setDate(expireDate.getDate() + 30);
-
-      var options = {
-        'expires': expireDate
-      };
-
-      $cookies.putObject('startingBalance', self.startingBalance, options);
-      $cookies.putObject('transactions', self.transactions, options);
+      localStorage.setItem('startingBalance', JSON.stringify(self.startingBalance));
+      localStorage.setItem('transactions', JSON.stringify(self.transactions));
     };
 
     self.load = function() {
-      self.startingBalance = $cookies.getObject('startingBalance');
-      self.transactions = $cookies.getObject('transactions');
+      self.startingBalance = JSON.parse(localStorage.getItem('startingBalance'));
+      self.transactions = JSON.parse(localStorage.getItem('transactions'));
     };
+
+    // on load
+    self.load();
   });

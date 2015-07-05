@@ -2,26 +2,22 @@ angular.module('checkbook', [])
   .controller('CheckbookController', function($filter) {
     var self = this;
 
-    self.startingBalance = 0;
     self.date = moment().format('MM/DD/YYYY');
-    self.runningAmount = 0;
     self.transactions = [];
+    self.accounts = [];
 
-    self.saveTransaction = function() {
-      // balance of last transaction or starting balance
-      var _balance = self.transactions.length ? self.transactions[self.transactions.length - 1].balance : self.startingBalance;
-      _balance += self.amount;
+    self.newAccount = {};
+    self.newTransaction = {};
 
-      self.transactions.push({
-        date: self.date,
-        description: self.description,
-        amount: self.amount,
-        editing: false,
-        balance: _balance
-      });
+    self.addAccount = function() {
+      self.accounts.push(self.newAccount);
+      self.newAccount = {};
+      self.save();
+    };
 
-      self.description = "";
-      self.amount = "";
+    self.addTransaction = function() {
+      self.transactions.push(self.newTransaction);
+      self.newTransaction = {};
       self.save();
     }
 
@@ -29,11 +25,13 @@ angular.module('checkbook', [])
       transaction.editing = !transaction.editing;
     };
 
-    self.getBalance = function(index) {
+    self.getBalance = function(account, index) {
       var orderedTransactions = $filter('orderBy')(self.transactions, '-date', true);
-      var sum = self.startingBalance;
+      var sum = account.balance
       for (var i = 0; i <= index; i++) {
-        sum += orderedTransactions[i].amount;
+        if (orderedTransactions[i].account == account) {
+          sum += orderedTransactions[i].amount;
+        }
       }
       return sum;
     };
@@ -56,18 +54,22 @@ angular.module('checkbook', [])
     };
 
     self.clearTransaction = function(transaction) {
-      self.startingBalance += transaction.amount;
+      var account = self.accounts.find(function(element, index, array) {
+        if(element.name == transaction.account.name)
+          return element;
+      });
+      account.balance += transaction.amount;
       self.removeTransaction(transaction);
     }
 
     self.save = function() {
-      localStorage.setItem('startingBalance', JSON.stringify(self.startingBalance));
       localStorage.setItem('transactions', JSON.stringify(self.transactions));
+      localStorage.setItem('accounts', JSON.stringify(self.accounts));
     };
 
     self.load = function() {
-      self.startingBalance = JSON.parse(localStorage.getItem('startingBalance'));
       self.transactions = JSON.parse(localStorage.getItem('transactions'));
+      self.accounts = JSON.parse(localStorage.getItem('accounts'));
     };
 
     // on load

@@ -1,0 +1,23 @@
+<h4>Accounts</h4>
+
+<table class="table table-striped table-bordered">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Balance</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr ng-repeat="account in cbCtrl.accounts">
+      <td>{{ account.name }}</td>
+      <td>{{ account.balance | currency }}</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><input class="form-control" type="text" ng-model="cbCtrl.newAccount.name"></td>
+      <td><input class="form-control" type="number" step="any" ng-model="cbCtrl.newAccount.balance"></td>
+      <td><button class="btn btn-primary" ng-click="cbCtrl.addAccount()">Add Account</button></td>
+    </tr>
+  </tbody>
+</table>

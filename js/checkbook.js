@@ -1,32 +1,31 @@
 angular.module('checkbook', [])
-  .controller('CheckbookController', function($filter) {
-    var self = this;
+  .controller('CheckbookController', function($filter, $scope) {
 
-    self.date = moment().format('MM/DD/YYYY');
-    self.transactions = [];
-    self.accounts = [];
+    $scope.date = moment().format('MM/DD/YYYY');
+    $scope.transactions = [];
+    $scope.accounts = [];
 
-    self.newAccount = {};
-    self.newTransaction = {};
+    $scope.newAccount = {};
+    $scope.newTransaction = {};
 
-    self.addAccount = function() {
-      self.accounts.push(self.newAccount);
-      self.newAccount = {};
-      self.save();
+    $scope.addAccount = function() {
+      $scope.accounts.push($scope.newAccount);
+      $scope.newAccount = {};
+      $scope.save();
     };
 
-    self.addTransaction = function() {
-      self.transactions.push(self.newTransaction);
-      self.newTransaction = {};
-      self.save();
+    $scope.addTransaction = function() {
+      $scope.transactions.push($scope.newTransaction);
+      $scope.newTransaction = {};
+      $scope.save();
     }
 
-    self.toggleEdit = function(obj) {
+    $scope.toggleEdit = function(obj) {
       obj.editing = !obj.editing;
     };
 
-    self.getBalance = function(account, index) {
-      var orderedTransactions = $filter('orderBy')(self.transactions, '-date', true);
+    $scope.getBalance = function(account, index) {
+      var orderedTransactions = $filter('orderBy')($scope.transactions, '-date', true);
       var sum = account.balance
       for (var i = 0; i <= index; i++) {
         if (orderedTransactions[i].account == account) {
@@ -36,11 +35,11 @@ angular.module('checkbook', [])
       return sum;
     };
 
-    self.repeatTransaction = function(transaction, days) {
+    $scope.repeatTransaction = function(transaction, days) {
       var unit = days > 0 ? 'days' : 'months';
       var amount = days || 1;
       var date = moment(new Date(transaction.date)).add(amount, unit);
-      self.newTransaction = {
+      $scope.newTransaction = {
         date: date.format('MM/DD/YYYY'),
         amount: transaction.amount,
         description: transaction.description,
@@ -48,41 +47,41 @@ angular.module('checkbook', [])
       };
     };
 
-    self.removeAccount = function(account) {
-      var index = self.accounts.indexOf(account);
+    $scope.removeAccount = function(account) {
+      var index = $scope.accounts.indexOf(account);
       if (index > -1) {
-        self.accounts.splice(index, 1);
+        $scope.accounts.splice(index, 1);
       }
-      self.save();
+      $scope.save();
     };
 
-    self.removeTransaction = function(transaction) {
-      var index = self.transactions.indexOf(transaction);
+    $scope.removeTransaction = function(transaction) {
+      var index = $scope.transactions.indexOf(transaction);
       if (index > -1) {
-        self.transactions.splice(index, 1);
+        $scope.transactions.splice(index, 1);
       }
-      self.save();
+      $scope.save();
     };
 
-    self.clearTransaction = function(transaction) {
-      var account = self.accounts.find(function(element, index, array) {
+    $scope.clearTransaction = function(transaction) {
+      var account = $scope.accounts.find(function(element, index, array) {
         if (element.name == transaction.account.name)
           return element;
       });
       account.balance += transaction.amount;
-      self.removeTransaction(transaction);
+      $scope.removeTransaction(transaction);
     }
 
-    self.save = function() {
-      localStorage.setItem('transactions', JSON.stringify(self.transactions));
-      localStorage.setItem('accounts', JSON.stringify(self.accounts));
+    $scope.save = function() {
+      localStorage.setItem('transactions', JSON.stringify($scope.transactions));
+      localStorage.setItem('accounts', JSON.stringify($scope.accounts));
     };
 
-    self.load = function() {
-      self.transactions = JSON.parse(localStorage.getItem('transactions'));
-      self.accounts = JSON.parse(localStorage.getItem('accounts'));
+    $scope.load = function() {
+      $scope.transactions = JSON.parse(localStorage.getItem('transactions'));
+      $scope.accounts = JSON.parse(localStorage.getItem('accounts'));
     };
 
     // on load
-    self.load();
+    $scope.load();
   });

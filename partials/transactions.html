@@ -10,7 +10,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr ng-repeat="transaction in cbCtrl.transactions | orderBy:'-date':true" ng-class="{'success': transaction.amount > 0}">
+    <tr ng-repeat="transaction in transactions | orderBy:'-date':true" ng-class="{'success': transaction.amount > 0}">
 
       <td ng-hide="transaction.editing">{{ transaction.date | date }}</td>
       <td ng-show="transaction.editing">
@@ -27,14 +27,14 @@
         <input type="number" ng-model="transaction.amount" value="{{ transaction.amount }}" />
       </td>
 
-      <td>{{ transaction.account.name }} {{ cbCtrl.getBalance(transaction.account, $index) | currency }}</td>
+      <td>{{ transaction.account.name }} {{ getBalance(transaction.account, $index) | currency }}</td>
 
       <td>
 
-        <button class="btn btn-default btn-sm" ng-hide="transaction.editing" ng-click="cbCtrl.toggleEdit(transaction)">
+        <button class="btn btn-default btn-sm" ng-hide="transaction.editing" ng-click="toggleEdit(transaction)">
           <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
         </button>
-        <button class="btn btn-success btn-sm" ng-show="transaction.editing" ng-click="cbCtrl.toggleEdit(transaction)">
+        <button class="btn btn-success btn-sm" ng-show="transaction.editing" ng-click="toggleEdit(transaction)">
           <span class="glyphicon glyphicon-saved" aria-hidden="true"></span>
         </button>
 
@@ -43,8 +43,8 @@
             <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
           </button>
           <ul class="dropdown-menu">
-            <li><a ng-click="cbCtrl.repeatTransaction(transaction, 14)">2 Weeks</a> </li>
-            <li><a ng-click="cbCtrl.repeatTransaction(transaction)">1 Month</a> </li>
+            <li><a ng-click="repeatTransaction(transaction, 14)">2 Weeks</a> </li>
+            <li><a ng-click="repeatTransaction(transaction)">1 Month</a> </li>
           </ul>
         </div>
 
@@ -53,9 +53,9 @@
             <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
           </button>
           <ul class="dropdown-menu">
-            <li><a ng-click="cbCtrl.removeTransaction(transaction)">Remove</a>
+            <li><a ng-click="removeTransaction(transaction)">Remove</a>
             </li>
-            <li><a ng-click="cbCtrl.clearTransaction(transaction)">Clear</a>
+            <li><a ng-click="clearTransaction(transaction)">Clear</a>
             </li>
           </ul>
         </div>
@@ -63,22 +63,22 @@
     </tr>
     <tr>
       <td>
-        <input type="text" class="form-control" ng-model="cbCtrl.newTransaction.date" placeholder="06/03/2015">
+        <input type="text" class="form-control" ng-model="newTransaction.date" placeholder="06/03/2015">
       </td>
       <td>
-        <input type="text" class="form-control" ng-model="cbCtrl.newTransaction.description" placeholder="Description">
+        <input type="text" class="form-control" ng-model="newTransaction.description" placeholder="Description">
       </td>
       <td>
         <div class="input-group">
           <div class="input-group-addon">$</div>
-          <input type="number" step="any" class="form-control" ng-model="cbCtrl.newTransaction.amount" placeholder="Amount">
+          <input type="number" step="any" class="form-control" ng-model="newTransaction.amount" placeholder="Amount">
         </div>
       </td>
       <td>
-        <select class="form-control" ng-model="cbCtrl.newTransaction.account" ng-options="account.name for account in cbCtrl.accounts"></select>
+        <select class="form-control" ng-model="newTransaction.account" ng-options="account.name for account in accounts"></select>
       </td>
       <td>
-        <button class="btn btn-primary" ng-click="cbCtrl.addTransaction()">Add Transaction</button>
+        <button class="btn btn-primary" ng-click="addTransaction()">Add Transaction</button>
       </td>
     </tr>
   </tbody>

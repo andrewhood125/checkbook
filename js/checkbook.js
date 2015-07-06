@@ -91,6 +91,18 @@ angular.module('checkbook', ['angularMoment'])
       $scope.saved = true;
     };
 
+    $scope.export = function() {
+      $scope.save();
+      $scope.rawTransactions = localStorage.getItem('transactions');
+      $scope.rawAccounts = localStorage.getItem('accounts');
+    };
+
+    $scope.import = function() {
+      localStorage.setItem('transactions', $scope.rawTransactions);
+      localStorage.setItem('accounts', $scope.rawAccounts);
+      $scope.load();
+    };
+
     $scope.load = function() {
       $scope.transactions = JSON.parse(localStorage.getItem('transactions'));
       $scope.accounts = JSON.parse(localStorage.getItem('accounts'));

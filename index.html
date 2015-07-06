@@ -30,8 +30,15 @@
         <div class="btn-group" role="group" aria-label="...">
           <button ng-click="save()" type="button" class="btn btn-default">Save</button>
           <button ng-click="load()" type="button" class="btn btn-default">Load</button>
+          <button ng-click="export()" type="button" class="btn btn-default">export</button>
+          <button ng-click="import()" type="button" class="btn btn-default">import</button>
         </div>
 
+        <h4>Import/Export</h4>
+        <h6>Transactions</h6>
+        <textarea ng-model="rawTransactions"></textarea>
+        <h6>Accounts</h6>
+        <textarea ng-model="rawAccounts"></textarea>
         <h4>TODO</h4>
         <ul>
         </ul>

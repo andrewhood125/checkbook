@@ -10,7 +10,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr ng-repeat="transaction in transactions | orderBy:'-date':true" ng-class="{'success': transaction.amount > 0}">
+    <tr ng-repeat="transaction in transactions | orderBy:'-date':true track by $index" ng-class="{'success': transaction.amount > 0}">
 
       <td ng-hide="transaction.editing">{{ transaction.date | date }}</td>
       <td ng-show="transaction.editing">
@@ -63,7 +63,7 @@
     </tr>
     <tr>
       <td>
-        <input type="text" class="form-control" ng-model="newTransaction.date" placeholder="06/03/2015">
+        <input type="text" class="form-control" ng-model="newTransaction.date">
       </td>
       <td>
         <input type="text" class="form-control" ng-model="newTransaction.description" placeholder="Description">

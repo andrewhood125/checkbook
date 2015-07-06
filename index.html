@@ -14,6 +14,10 @@
   <div class="container">
 
     <div class="row">
+      <div class="col-md-10 col-md-offset-1" ng-include="'/partials/alert.html'"></div>
+    </div>
+
+    <div class="row">
       <div class="col-md-4 col-md-offset-1" ng-include="'/partials/accounts.html'"></div>
     </div>
 
@@ -30,8 +34,6 @@
 
         <h4>TODO</h4>
         <ul>
-          <li>Animate when save is successful.</li>
-          <li>Show last saved time.</li>
         </ul>
 
       </div>
@@ -43,6 +45,7 @@
   <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
   <script src="/bower_components/angular/angular.min.js"></script>
   <script src="/bower_components/momentjs/min/moment.min.js"></script>
+  <script src="/bower_components/angular-moment/angular-moment.min.js"></script>
   <script src="/js/checkbook.js"></script>
 
 </body>

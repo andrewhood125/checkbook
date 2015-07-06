@@ -1,12 +1,18 @@
-angular.module('checkbook', [])
+angular.module('checkbook', ['angularMoment'])
   .controller('CheckbookController', function($filter, $scope) {
 
-    $scope.date = moment().format('MM/DD/YYYY');
     $scope.transactions = [];
     $scope.accounts = [];
 
+    $scope.lastSavedAt = "Never";
+
     $scope.newAccount = {};
-    $scope.newTransaction = {};
+
+    $scope.resetNewTransaction = function() {
+      $scope.newTransaction = {
+        date: moment().format('MM/DD/YYYY')
+      };
+    };
 
     $scope.addAccount = function() {
       $scope.accounts.push($scope.newAccount);
@@ -16,7 +22,7 @@ angular.module('checkbook', [])
 
     $scope.addTransaction = function() {
       $scope.transactions.push($scope.newTransaction);
-      $scope.newTransaction = {};
+      $scope.resetNewTransaction();
       $scope.save();
     }
 
@@ -26,9 +32,14 @@ angular.module('checkbook', [])
 
     $scope.getBalance = function(account, index) {
       var orderedTransactions = $filter('orderBy')($scope.transactions, '-date', true);
-      var sum = account.balance
+      var _account = $scope.accounts.find(function(element, index, array) {
+        if (element.name == account.name) {
+          return element;
+        }
+      });
+      var sum = _account.balance;
       for (var i = 0; i <= index; i++) {
-        if (orderedTransactions[i].account == account) {
+        if (orderedTransactions[i].account.name == _account.name) {
           sum += orderedTransactions[i].amount;
         }
       }
@@ -45,6 +56,7 @@ angular.module('checkbook', [])
         description: transaction.description,
         account: transaction.account
       };
+      $scope.addTransaction();
     };
 
     $scope.removeAccount = function(account) {
@@ -75,6 +87,8 @@ angular.module('checkbook', [])
     $scope.save = function() {
       localStorage.setItem('transactions', JSON.stringify($scope.transactions));
       localStorage.setItem('accounts', JSON.stringify($scope.accounts));
+      $scope.lastSavedAt = moment();
+      $scope.saved = true;
     };
 
     $scope.load = function() {
@@ -84,4 +98,5 @@ angular.module('checkbook', [])
 
     // on load
     $scope.load();
+    $scope.resetNewTransaction();
   });

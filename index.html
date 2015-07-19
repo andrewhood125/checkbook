@@ -6,6 +6,7 @@
   <title>Checkbook</title>
 
   <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/bower_components/angular-chart.js/dist/angular-chart.css">
   <link rel="stylesheet" href="/css/app.css">
 
 </head>
@@ -22,8 +23,14 @@
     </div>
 
     <div class="row">
-      <div class="col-md-10 col-md-offset-1" ng-include="'/partials/transactions.html'"></div>
+      <div class="col-md-12">
+        <h4>Graph</h4>
+        <canvas id="line" class="chart chart-line" data="data" labels="labels" legend="true" series="series" click="onClick"></canvas>
+      </div>
+    </div>
 
+    <div class="row">
+      <div class="col-md-10 col-md-offset-1" ng-include="'/partials/transactions.html'"></div>
 
       <div class="col-md-10 col-md-offset-1">
         <hr>
@@ -46,13 +53,16 @@
       </div>
     </div>
 
-  </div> <!-- .container -->
+  </div>
+  <!-- .container -->
 
   <script src="/bower_components/jquery/dist/jquery.min.js"></script>
   <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
   <script src="/bower_components/angular/angular.min.js"></script>
   <script src="/bower_components/momentjs/min/moment.min.js"></script>
   <script src="/bower_components/angular-moment/angular-moment.min.js"></script>
+  <script src="/bower_components/Chart.js/Chart.min.js"></script>
+  <script src="/bower_components/angular-chart.js/dist/angular-chart.js"></script>
   <script src="/js/checkbook.js"></script>
 
 </body>

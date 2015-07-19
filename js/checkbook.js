@@ -1,5 +1,54 @@
-angular.module('checkbook', ['angularMoment'])
+angular.module('checkbook', ['angularMoment', 'chart.js'])
   .controller('CheckbookController', function($filter, $scope) {
+
+    $scope.labels = [];
+
+    $scope.generateLabels = function(days) {
+      var days = days || 7;
+      for(var i = 0; i < days; i+=2) {
+        $scope.labels.push(moment().add(i, 'days').format('ll'));
+      }
+    }
+
+
+    $scope.series = [];
+
+    $scope.generateSeries = function() {
+      for(var i = 0; i < $scope.accounts.length; i++) {
+        $scope.series.push($scope.accounts[i].name);
+      }
+    };
+
+
+    $scope.generateData = function() {
+      $scope.data = new Array($scope.accounts.length);
+      for(var i = 0; i < $scope.accounts.length; i++) {
+        $scope.data[i] = new Array();
+      }
+
+      for(var i = 0; i < $scope.labels.length; i++) {
+        for(var j = 0; j < $scope.accounts.length; j++) {
+          var account = $scope.accounts[j];
+          $scope.data[j].push($scope.getBalanceOn($scope.labels[i], account));
+        }
+      }
+    };
+
+
+    $scope.getBalanceOn = function(string_date, account) {
+      date = moment(string_date).add(1, 'day');
+      var balance = account.balance;
+      var orderedTransactions = $filter('orderBy')($scope.transactions, '-date', true);
+
+      for(var i = 0; moment(orderedTransactions[i].date).isBefore(date); i++) {
+        var transaction = orderedTransactions[i];
+        if(transaction.account.name === account.name) {
+          balance += transaction.amount;
+        }
+      }
+
+      return balance.toFixed(2);
+    };
 
     $scope.transactions = [];
     $scope.accounts = [];
@@ -111,4 +160,7 @@ angular.module('checkbook', ['angularMoment'])
     // on load
     $scope.load();
     $scope.resetNewTransaction();
+    $scope.generateSeries();
+    $scope.generateLabels(120);
+    $scope.generateData();
   });
